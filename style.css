@@ -230,21 +230,20 @@ h3 {
     margin-bottom: 5px;
 }
 
-/* --- VIDEO STYLES --- */
 /* --- UPDATED VIDEO STYLES --- */
 .video-wrapper {
     /* Allow the video to be wider than the text */
     width: 90%; 
-    max-width: 1100px; /* Much larger max-width */
-    margin: 40px auto; /* Center it */
+    max-width: 1100px; /* This is now larger than the 800px text */
+    margin: 60px auto; /* Increased margin for better spacing */
     position: relative;
+    z-index: 2;
 }
 
 .video-frame {
     position: relative;
     width: 100%;
-    /* This creates a perfect 16:9 Aspect Ratio */
-    padding-bottom: 56.25%; 
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
     height: 0;
     border: 3px solid #ffaa00;
     box-shadow: 0 0 30px rgba(255, 170, 0, 0.4);
@@ -253,7 +252,6 @@ h3 {
     overflow: hidden;
 }
 
-/* Force the iframe to fill the container */
 .video-frame iframe {
     position: absolute;
     top: 0;
@@ -261,4 +259,14 @@ h3 {
     width: 100%;
     height: 100%;
 }
+
+.caption {
+    text-align: center;
+    color: #ccc;
+    font-style: italic;
+    margin-top: 15px;
+    background: rgba(0,0,0,0.6);
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
 }
