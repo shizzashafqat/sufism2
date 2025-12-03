@@ -2,30 +2,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const enterBtn = document.getElementById('enter-btn');
     const landingScreen = document.getElementById('landing-screen');
     const shrineSection = document.getElementById('shrine-section');
-    const audio = document.getElementById('ambient-audio');
-
-enterBtn.addEventListener('click', () => {
-        // 1. Initialize Audio Elements
+    
+    // --- ENTER BUTTON LOGIC ---
+    enterBtn.addEventListener('click', () => {
         const landingAudio = document.getElementById('ambient-audio');
         const shrineAudio = document.getElementById('shrine-audio');
 
-        // Start landing audio (if it wasn't already playing)
+        // Start landing audio
         landingAudio.volume = 0.5;
         landingAudio.play().catch(e => console.log("Audio play failed:", e));
 
-        // 2. Visual Transition
+        // Visual Transition
         landingScreen.classList.add('fade-out');
 
-        // 3. WAIT 1.5 seconds (matches the CSS animation time)
+        // WAIT 1.5 seconds
         setTimeout(() => {
-            // Hide Landing, Show Shrine
             landingScreen.style.display = 'none';
             shrineSection.classList.remove('hidden');
             shrineSection.scrollIntoView({ behavior: 'smooth' });
 
-            // --- THE AUDIO SWITCH ---
-            
-            // Fade out the Wind/Bells (Landing Audio)
+            // --- AUDIO SWITCH ---
             let vol = 0.5;
             const fadeOutInterval = setInterval(() => {
                 if (vol > 0.1) {
@@ -33,35 +29,36 @@ enterBtn.addEventListener('click', () => {
                     landingAudio.volume = vol;
                 } else {
                     clearInterval(fadeOutInterval);
-                    landingAudio.pause(); // Stop it completely
-                    landingAudio.currentTime = 0; // Reset for next time
+                    landingAudio.pause(); 
+                    landingAudio.currentTime = 0; 
                 }
-            }, 100); // Reduce volume every 100ms
+            }, 100);
 
-            // Start the Shrine Audio (Clapping/Ambience)
-            shrineAudio.volume = 0.6; // Set comfortable volume
+            shrineAudio.volume = 0.6; 
             shrineAudio.play().catch(e => console.log("Shrine audio failed:", e));
 
         }, 1500); 
     });
+
     // --- SCROLL ANIMATION OBSERVER ---
-const observerOptions = {
-    threshold: 0.2 // Trigger when 20% of the item is visible
-};
+    const observerOptions = { threshold: 0.2 };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible'); 
+            }
+        });
+    }, observerOptions);
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible'); // Add a class to animate
-        }
-    });
-}, observerOptions);
+    const fadeElements = document.querySelectorAll('.fade-in-element');
+    fadeElements.forEach(el => observer.observe(el));
+});
 
-// Select all elements meant to fade in
-const fadeElements = document.querySelectorAll('.fade-in-element');
-fadeElements.forEach(el => observer.observe(el));
+// ==========================================
+// YOUTUBE API (MUST BE OUTSIDE DOMContentLoaded)
+// ==========================================
 
-// --- YOUTUBE AUTOPLAY ON SCROLL ---
+var player; // Global variable
 
 // 1. Load the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
@@ -70,7 +67,6 @@ var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 // 2. This function creates an <iframe> (and YouTube player)
-var player;
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('youtube-player', {
         events: {
@@ -90,39 +86,34 @@ function setupVideoObserver() {
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            // IF VIDEO IS IN VIEW
             if (entry.isIntersecting) {
-                // Play Video
+                // Video In View: Play Video, Fade Audio
                 if (player && player.playVideo) {
                     player.playVideo();
                 }
-                
-                // Fade out background audio so it doesn't clash
                 fadeAudio(shrineAudio, 0); 
-            } 
-            // IF VIDEO IS OUT OF VIEW
-            else {
-                // Pause Video
+            } else {
+                // Video Out of View: Pause Video, Restore Audio
                 if (player && player.pauseVideo) {
                     player.pauseVideo();
                 }
-
-                // Fade background audio back in
-                shrineAudio.play(); // Ensure it's playing
-                fadeAudio(shrineAudio, 0.6); // Restore volume
+                if(shrineAudio) {
+                    shrineAudio.play();
+                    fadeAudio(shrineAudio, 0.6); 
+                }
             }
         });
-    }, { threshold: 0.5 }); // Trigger when 50% of the video is visible
+    }, { threshold: 0.5 });
 
     observer.observe(videoElement);
 }
 
 // Helper function to fade audio smoothly
 function fadeAudio(audio, targetVolume) {
+    if(!audio) return;
     const step = 0.05;
-    const interval = 50; // ms
+    const interval = 50; 
     
-    // Clear any existing fade interval to prevent conflicts
     if (audio.fadeInterval) clearInterval(audio.fadeInterval);
 
     audio.fadeInterval = setInterval(() => {
@@ -138,4 +129,3 @@ function fadeAudio(audio, targetVolume) {
         }
     }, interval);
 }
-});
