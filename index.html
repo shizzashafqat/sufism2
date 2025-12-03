@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of the Mystic</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="landing-screen">
+        <div class="content-wrapper">
+            <div class="lamp-container">
+                <img src="diya.png" alt="Sufi Lamp" class="diya-img" onerror="this.style.display='none'">
+                <div class="glow-effect"></div> 
+            </div>
+
+            <h1 class="main-title">Echoes of the Mystic</h1>
+            
+            <p class="intro-text">
+                "Qawwali was never meant to be entertainment.<br>
+                It was a path to the Divine."
+            </p>
+
+            <button id="enter-btn">Enter the Shrine</button>
+        </div>
+    </div>
+
+    <div id="shrine-section" class="hidden">
+        <h2>The Shrine Content Begins Here...</h2>
+    </div>
+
+    <audio id="ambient-audio" loop>
+        <source src="wind-bells.mp3" type="audio/mpeg">
+        </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
