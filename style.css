@@ -1,0 +1,112 @@
+/* GENERAL RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000; /* Pitch black start */
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    overflow-x: hidden;
+}
+
+/* LANDING SCREEN STYLES */
+#landing-screen {
+    height: 100vh; /* Full screen height */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000 70%);
+    transition: opacity 1.5s ease-out; /* Smooth fade out */
+    z-index: 10;
+    position: relative;
+}
+
+.lamp-container {
+    position: relative;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.diya-img {
+    width: 150px;
+    height: auto;
+    z-index: 2;
+    filter: drop-shadow(0 0 10px #ffaa00);
+}
+
+/* Pure CSS Glow if you don't have an image yet */
+.glow-effect {
+    width: 50px;
+    height: 50px;
+    background-color: #ffaa00;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 60px 30px rgba(255, 170, 0, 0.4);
+    animation: flicker 3s infinite alternate;
+    z-index: 1;
+}
+
+/* TITLE AND TEXT */
+.main-title {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5rem;
+    letter-spacing: 3px;
+    margin-bottom: 1.5rem;
+    color: #e0e0e0;
+    text-transform: uppercase;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    color: #aaa;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+/* BUTTON STYLING */
+#enter-btn {
+    padding: 15px 40px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: #ffaa00;
+    background: transparent;
+    border: 1px solid #ffaa00;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+#enter-btn:hover {
+    background: #ffaa00;
+    color: #000;
+    box-shadow: 0 0 20px #ffaa00;
+}
+
+/* ANIMATIONS */
+@keyframes flicker {
+    0% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.95); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* UTILITY CLASSES */
+.fade-out {
+    opacity: 0;
+    pointer-events: none; /* Prevents clicking after fade */
+}
+
+.hidden {
+    display: none;
+}
