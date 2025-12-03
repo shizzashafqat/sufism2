@@ -24,4 +24,20 @@ document.addEventListener('DOMContentLoaded', () => {
             shrineSection.scrollIntoView({ behavior: 'smooth' });
         }, 1500); // 1500ms matches the CSS transition time
     });
+    // --- SCROLL ANIMATION OBSERVER ---
+const observerOptions = {
+    threshold: 0.2 // Trigger when 20% of the item is visible
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible'); // Add a class to animate
+        }
+    });
+}, observerOptions);
+
+// Select all elements meant to fade in
+const fadeElements = document.querySelectorAll('.fade-in-element');
+fadeElements.forEach(el => observer.observe(el));
 });
