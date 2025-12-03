@@ -4,25 +4,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const shrineSection = document.getElementById('shrine-section');
     const audio = document.getElementById('ambient-audio');
 
-    enterBtn.addEventListener('click', () => {
-        // 1. Start the audio (User interaction allows this)
-        // Ensure you have an audio file, or comment this out to test without sound
-        audio.volume = 0.5; // Set volume to 50%
-        audio.play().catch(error => console.log("Audio play failed:", error));
+enterBtn.addEventListener('click', () => {
+        // 1. Initialize Audio Elements
+        const landingAudio = document.getElementById('ambient-audio');
+        const shrineAudio = document.getElementById('shrine-audio');
 
-        // 2. Fade out the landing screen
+        // Start landing audio (if it wasn't already playing)
+        landingAudio.volume = 0.5;
+        landingAudio.play().catch(e => console.log("Audio play failed:", e));
+
+        // 2. Visual Transition
         landingScreen.classList.add('fade-out');
 
-        // 3. Wait for the CSS transition (1.5s) to finish, then remove landing
+        // 3. WAIT 1.5 seconds (matches the CSS animation time)
         setTimeout(() => {
+            // Hide Landing, Show Shrine
             landingScreen.style.display = 'none';
-            
-            // 4. Reveal the next section (The Shrine)
             shrineSection.classList.remove('hidden');
-            
-            // Optional: Smooth scroll into the shrine view
             shrineSection.scrollIntoView({ behavior: 'smooth' });
-        }, 1500); // 1500ms matches the CSS transition time
+
+            // --- THE AUDIO SWITCH ---
+            
+            // Fade out the Wind/Bells (Landing Audio)
+            let vol = 0.5;
+            const fadeOutInterval = setInterval(() => {
+                if (vol > 0.1) {
+                    vol -= 0.1;
+                    landingAudio.volume = vol;
+                } else {
+                    clearInterval(fadeOutInterval);
+                    landingAudio.pause(); // Stop it completely
+                    landingAudio.currentTime = 0; // Reset for next time
+                }
+            }, 100); // Reduce volume every 100ms
+
+            // Start the Shrine Audio (Clapping/Ambience)
+            shrineAudio.volume = 0.6; // Set comfortable volume
+            shrineAudio.play().catch(e => console.log("Shrine audio failed:", e));
+
+        }, 1500); 
     });
     // --- SCROLL ANIMATION OBSERVER ---
 const observerOptions = {
