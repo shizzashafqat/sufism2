@@ -60,4 +60,82 @@ const observer = new IntersectionObserver((entries) => {
 // Select all elements meant to fade in
 const fadeElements = document.querySelectorAll('.fade-in-element');
 fadeElements.forEach(el => observer.observe(el));
+
+// --- YOUTUBE AUTOPLAY ON SCROLL ---
+
+// 1. Load the IFrame Player API code asynchronously.
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+// 2. This function creates an <iframe> (and YouTube player)
+var player;
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtube-player', {
+        events: {
+            'onReady': onPlayerReady
+        }
+    });
+}
+
+// 3. The API will call this function when the video player is ready.
+function onPlayerReady(event) {
+    setupVideoObserver();
+}
+
+function setupVideoObserver() {
+    const videoElement = document.getElementById('youtube-player');
+    const shrineAudio = document.getElementById('shrine-audio');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            // IF VIDEO IS IN VIEW
+            if (entry.isIntersecting) {
+                // Play Video
+                if (player && player.playVideo) {
+                    player.playVideo();
+                }
+                
+                // Fade out background audio so it doesn't clash
+                fadeAudio(shrineAudio, 0); 
+            } 
+            // IF VIDEO IS OUT OF VIEW
+            else {
+                // Pause Video
+                if (player && player.pauseVideo) {
+                    player.pauseVideo();
+                }
+
+                // Fade background audio back in
+                shrineAudio.play(); // Ensure it's playing
+                fadeAudio(shrineAudio, 0.6); // Restore volume
+            }
+        });
+    }, { threshold: 0.5 }); // Trigger when 50% of the video is visible
+
+    observer.observe(videoElement);
+}
+
+// Helper function to fade audio smoothly
+function fadeAudio(audio, targetVolume) {
+    const step = 0.05;
+    const interval = 50; // ms
+    
+    // Clear any existing fade interval to prevent conflicts
+    if (audio.fadeInterval) clearInterval(audio.fadeInterval);
+
+    audio.fadeInterval = setInterval(() => {
+        let currentVol = audio.volume;
+        
+        if (Math.abs(currentVol - targetVolume) < step) {
+            audio.volume = targetVolume;
+            clearInterval(audio.fadeInterval);
+        } else if (currentVol > targetVolume) {
+            audio.volume -= step;
+        } else {
+            audio.volume += step;
+        }
+    }, interval);
+}
 });
