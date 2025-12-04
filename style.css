@@ -270,3 +270,54 @@ h3 {
     border-radius: 5px;
     display: inline-block;
 }
+/* --- SCENE 3: MODERN ERA STYLES --- */
+
+#modern-section {
+    position: relative;
+    min-height: 150vh;
+    width: 100%;
+    color: #fff;
+    padding-bottom: 100px;
+    z-index: 5;
+}
+
+/* Modern Background - Initially Hidden */
+#modern-bg {
+    background-image: url('concert-bg.jpg'); /* Your new image */
+    background-size: cover;
+    background-position: center;
+    opacity: 0; /* Hidden until we scroll to it */
+    transition: opacity 1s ease-in-out;
+}
+
+/* Darker Glass Style for Modern Section */
+.glass-dark {
+    background: rgba(20, 20, 20, 0.85); /* Darker than shrine cards */
+    border: 1px solid rgba(255, 50, 50, 0.4); /* Red tint border */
+    box-shadow: 0 0 20px rgba(200, 0, 0, 0.2); /* Red glow */
+}
+
+.modern-content {
+    padding: 100px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+}
+
+/* Special Red Border for Modern Video */
+.border-red .video-frame {
+    border: 3px solid #ff3333;
+    box-shadow: 0 0 40px rgba(255, 0, 0, 0.3);
+}
+
+.border-red .caption {
+    color: #ffcccc; /* Light red text */
+}
+
+/* Visible Class for Background Switching */
+.bg-active {
+    opacity: 1 !important;
+    z-index: -1;
+}
