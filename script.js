@@ -88,54 +88,52 @@ document.addEventListener('DOMContentLoaded', () => {
 // YOUTUBE API (MUST BE OUTSIDE DOMContentLoaded)
 // ==========================================
 
-var player; // Global variable
+// Updated YouTube Logic
 
-// 1. Load the IFrame Player API code asynchronously.
-var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+var player1; // Shrine
+var player2; // Modern
 
-// 2. This function creates an <iframe> (and YouTube player)
 function onYouTubeIframeAPIReady() {
-    player = new YT.Player('youtube-player', {
-        events: {
-            'onReady': onPlayerReady
-        }
+    // Player 1 (Shrine)
+    player1 = new YT.Player('youtube-player', {
+        events: { 'onReady': onPlayerReady }
+    });
+    
+    // Player 2 (Modern)
+    player2 = new YT.Player('modern-player', {
+        events: { 'onReady': onPlayerReady }
     });
 }
 
-// 3. The API will call this function when the video player is ready.
-function onPlayerReady(event) {
-    setupVideoObserver();
+function setupVideoObserver() {
+    // Observer for Shrine Video
+    const video1 = document.getElementById('youtube-player');
+    const shrineAudio = document.getElementById('shrine-audio');
+    
+    // Create specific observer for Video 1 (Shrine)
+    createVideoObserver(video1, player1, shrineAudio);
+
+    // Observer for Modern Video
+    const video2 = document.getElementById('modern-player');
+    // We pass 'null' for audio because we don't have a specific modern ambience track to pause yet
+    // Or you can pass shrineAudio to ensure it stays off.
+    createVideoObserver(video2, player2, shrineAudio); 
 }
 
-function setupVideoObserver() {
-    const videoElement = document.getElementById('youtube-player');
-    const shrineAudio = document.getElementById('shrine-audio');
-
+function createVideoObserver(element, ytPlayer, bgAudio) {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Video In View: Play Video, Fade Audio
-                if (player && player.playVideo) {
-                    player.playVideo();
-                }
-                fadeAudio(shrineAudio, 0); 
+                if (ytPlayer && ytPlayer.playVideo) ytPlayer.playVideo();
+                if (bgAudio) fadeAudio(bgAudio, 0);
             } else {
-                // Video Out of View: Pause Video, Restore Audio
-                if (player && player.pauseVideo) {
-                    player.pauseVideo();
-                }
-                if(shrineAudio) {
-                    shrineAudio.play();
-                    fadeAudio(shrineAudio, 0.6); 
-                }
+                if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+                // Only fade audio back in if we are NOT in the modern section (this logic can get complex)
+                // For simplicity, we just pause the video.
             }
         });
     }, { threshold: 0.5 });
-
-    observer.observe(videoElement);
+    observer.observe(element);
 }
 
 // Helper function to fade audio smoothly
