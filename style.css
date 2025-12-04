@@ -108,7 +108,7 @@ body {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 /* --- SCENE 2: SHRINE STYLES --- */
 
@@ -173,7 +173,7 @@ h3 {
     text-align: center;
 }
 
-/* --- INTERACTIVE RITUAL ICONS --- */
+/* --- UPDATED INTERACTIVE RITUAL ICONS --- */
 .icons-container {
     display: flex;
     justify-content: space-around;
@@ -186,51 +186,123 @@ h3 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 150px;
+    width: 120px;
     text-align: center;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
-.ritual-item:hover {
-    transform: translateY(-10px);
+.ritual-item:active {
+    transform: scale(0.95);
 }
 
 .icon-circle {
-    width: 70px;
-    height: 70px;
-    background: #ffaa00;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 170, 0, 0.1);
+    border: 2px solid #ffaa00;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    box-shadow: 0 0 15px rgba(255, 170, 0, 0.3);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.ritual-item:hover .icon-circle {
+    background: #ffaa00;
+    color: #000;
+    box-shadow: 0 0 25px #ffaa00;
+}
+
+.icon-label {
+    font-family: 'Cinzel', serif;
+    color: #ccc;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 170, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 170, 0, 0); }
+}
+
+/* --- NEW MODAL STYLES --- */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 1000; /* Highest priority */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background: rgba(20, 20, 20, 0.95);
+    border: 2px solid #ffaa00;
+    padding: 40px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255, 170, 0, 0.3);
+    position: relative;
+    transform: scale(1);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal.hidden .modal-content {
+    transform: scale(0.8);
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2rem;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-modal:hover {
+    color: #ffaa00;
+}
+
+.modal-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px #ffaa00;
+}
+
+#modal-title {
+    font-family: 'Cinzel', serif;
+    color: #ffaa00;
     font-size: 2rem;
     margin-bottom: 15px;
-    box-shadow: 0 0 15px #ffaa00;
 }
 
-.ritual-info {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
-    background: #222;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    display: block; /* important fix */
+#modal-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #ddd;
 }
 
-
-/* Reveal info on hover */
-.ritual-item:hover .ritual-info {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.ritual-info h4 {
-    color: #ffaa00;
-    margin-bottom: 5px;
-}
 
 /* --- UPDATED VIDEO STYLES --- */
 .video-wrapper {
