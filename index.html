@@ -13,34 +13,37 @@
         .ritual-item {
             cursor: pointer;
             transition: transform 0.3s ease;
-            vertical-align: top; /* Keeps alignment aligned if heights differ */
+            vertical-align: top;
+            position: relative;
         }
         
         .ritual-info {
-            /* Start hidden and collapsed */
-            opacity: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.5s ease;
+            /* FORCE HIDDEN STATE */
+            opacity: 0 !important;
+            max-height: 0 !important;
+            margin-top: 0 !important;
+            padding: 0 15px !important; /* 0 vertical padding prevents height issues */
+            overflow: hidden !important;
             
-            /* Styling */
-            background: rgba(0, 0, 0, 0.85);
+            /* SMOOTH ANIMATION */
+            transition: all 0.4s ease-in-out;
+            
+            /* VISUAL STYLING */
+            background: rgba(0, 0, 0, 0.9);
             color: #e0e0e0;
             border-radius: 8px;
-            padding: 0 15px; /* No padding when closed */
-            margin-top: 0;
             font-size: 0.9rem;
             text-align: center;
         }
 
         /* THE TRIGGER: Expand and Fade In on Hover */
         .ritual-item:hover .ritual-info {
-            opacity: 1;
-            max-height: 300px; /* Allow enough height for text */
-            padding: 15px; /* Add padding back */
-            margin-top: 10px;
+            opacity: 1 !important;
+            max-height: 400px !important; /* Large enough to fit text */
+            padding: 15px !important;
+            margin-top: 15px !important;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255, 170, 0, 0.3);
+            border: 1px solid rgba(255, 170, 0, 0.5);
         }
 
         .ritual-item:hover .icon-circle {
