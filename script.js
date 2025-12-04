@@ -1,61 +1,84 @@
 document.addEventListener('DOMContentLoaded', () => {
+
     // 1. SELECT ALL ELEMENTS AT THE TOP
     const enterBtn = document.getElementById('enter-btn');
     const landingScreen = document.getElementById('landing-screen');
     const shrineSection = document.getElementById('shrine-section');
     const modernSection = document.getElementById('modern-section');
-    const analysisSection = document.getElementById('analysis-section'); // NEW
-    
+    const analysisSection = document.getElementById('analysis-section');
+
     const modernBg = document.getElementById('modern-bg');
-    const analysisBg = document.getElementById('analysis-bg'); // NEW
-    
+    const analysisBg = document.getElementById('analysis-bg');
+
     const landingAudio = document.getElementById('ambient-audio');
     const shrineAudio = document.getElementById('shrine-audio');
-    
+
     const fadeElements = document.querySelectorAll('.fade-in-element');
+
+    // 🔹 RITUAL MODAL ELEMENTS
+    const ritualItems = document.querySelectorAll('.ritual-item');
+    const ritualModal = document.getElementById('ritual-modal');
+    const modalIconDisplay = document.getElementById('modal-icon-display');
+    const modalTitle = document.getElementById('modal-title');
+    const modalText = document.getElementById('modal-text');
+    const closeModalBtn = document.querySelector('.close-modal');
+
+    // 🔹 CONTENT FOR EACH RITUAL
+    const ritualContent = {
+        thread: {
+            icon: '🧵',
+            title: 'Mannat (Sacred Thread)',
+            text: 'Visitors tie threads to the shrine\'s grills or trees when making a mannat — a heartfelt prayer or vow. When the wish is fulfilled, they often return to untie the thread in gratitude.'
+        },
+        langar: {
+            icon: '🍚',
+            title: 'Langar (Sacred Meal)',
+            text: 'Langar is the shared meal cooked and distributed at shrines. It symbolizes equality, community care, and the belief that blessings are multiplied when food is shared.'
+        },
+        rose: {
+            icon: '🌹',
+            title: 'Flower Offering',
+            text: 'Rose petals and garlands are placed on the saint’s tomb as a sign of love and respect. The fragrance and colors create an atmosphere of beauty and devotion.'
+        }
+    };
 
     // 2. ENTER BUTTON LOGIC
     if (enterBtn) {
         enterBtn.addEventListener('click', () => {
             // Play landing audio
-            if(landingAudio) {
+            if (landingAudio) {
                 landingAudio.volume = 0.5;
                 landingAudio.play().catch(e => console.log("Audio play failed:", e));
             }
 
             // Visual Transition
-            if(landingScreen) landingScreen.classList.add('fade-out');
+            if (landingScreen) landingScreen.classList.add('fade-out');
 
             // Wait 1.5s then switch
             setTimeout(() => {
-                // 1. Hide Landing Screen
-                if(landingScreen) landingScreen.style.display = 'none';
-                
-                // 2. Reveal Shrine Section
-                if(shrineSection) {
+                if (landingScreen) landingScreen.style.display = 'none';
+
+                if (shrineSection) {
                     shrineSection.classList.remove('hidden');
                     shrineSection.scrollIntoView({ behavior: 'smooth' });
                 }
 
-                // 3. REVEAL MODERN SECTION
-                if(modernSection) {
+                if (modernSection) {
                     modernSection.classList.remove('hidden');
                 }
 
-                // 4. REVEAL ANALYSIS SECTION (NEW)
-                if(analysisSection) {
+                if (analysisSection) {
                     analysisSection.classList.remove('hidden');
                 }
 
-                // 5. Audio Switch
-                if(landingAudio) fadeAudioOut(landingAudio);
-                
-                if(shrineAudio) {
+                if (landingAudio) fadeAudioOut(landingAudio);
+
+                if (shrineAudio) {
                     shrineAudio.volume = 0.6;
                     shrineAudio.play().catch(e => console.log("Shrine audio failed:", e));
                 }
 
-            }, 1500); 
+            }, 1500);
         });
     }
 
@@ -76,35 +99,65 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 const id = entry.target.id;
 
-                // MODERN SECTION LOGIC
                 if (id === 'modern-section') {
-                    if(modernBg) modernBg.classList.add('bg-active');
-                    if(analysisBg) analysisBg.classList.remove('bg-active'); // Hide Analysis BG if scrolling UP
-                    if(shrineAudio) fadeAudio(shrineAudio, 0); 
-                } 
-                
-                // ANALYSIS SECTION LOGIC (NEW)
-                else if (id === 'analysis-section') {
-                    if(analysisBg) analysisBg.classList.add('bg-active');
-                    // Optional: Fade audio back in for emotional ending?
-                    // if(shrineAudio) fadeAudio(shrineAudio, 0.3); 
+                    if (modernBg) modernBg.classList.add('bg-active');
+                    if (analysisBg) analysisBg.classList.remove('bg-active');
+                    if (shrineAudio) fadeAudio(shrineAudio, 0);
+                } else if (id === 'analysis-section') {
+                    if (analysisBg) analysisBg.classList.add('bg-active');
+                    // Optional: fade shrineAudio back in a bit
+                    // if (shrineAudio) fadeAudio(shrineAudio, 0.3);
                 }
             } else {
-                // Leaving logic (Scrolling UP)
                 if (entry.target.id === 'modern-section' && entry.boundingClientRect.top > 0) {
-                    if(modernBg) modernBg.classList.remove('bg-active');
-                    if(shrineAudio) {
-                        shrineAudio.play();
-                        fadeAudio(shrineAudio, 0.6); 
+                    if (modernBg) modernBg.classList.remove('bg-active');
+                    if (shrineAudio) {
+                        shrineAudio.play().catch(() => {});
+                        fadeAudio(shrineAudio, 0.6);
                     }
                 }
             }
         });
-    }, { threshold: 0.1 }); 
+    }, { threshold: 0.1 });
 
-    if(modernSection) sceneObserver.observe(modernSection);
-    if(analysisSection) sceneObserver.observe(analysisSection); // NEW
+    if (modernSection) sceneObserver.observe(modernSection);
+    if (analysisSection) sceneObserver.observe(analysisSection);
+
+    // 🔹 5. RITUAL ICON CLICK LOGIC (FIX)
+    ritualItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const key = item.dataset.ritual;
+            const data = ritualContent[key];
+
+            if (!data || !ritualModal) return;
+
+            // Fill modal content
+            if (modalIconDisplay) modalIconDisplay.textContent = data.icon;
+            if (modalTitle) modalTitle.textContent = data.title;
+            if (modalText) modalText.textContent = data.text;
+
+            // Show modal
+            ritualModal.classList.remove('hidden');
+        });
+    });
+
+    // Close modal (X button)
+    if (closeModalBtn && ritualModal) {
+        closeModalBtn.addEventListener('click', () => {
+            ritualModal.classList.add('hidden');
+        });
+    }
+
+    // Close modal when clicking outside content
+    if (ritualModal) {
+        ritualModal.addEventListener('click', (e) => {
+            if (e.target === ritualModal) {
+                ritualModal.classList.add('hidden');
+            }
+        });
+    }
 });
+
 
 // ==========================================
 // YOUTUBE API (GLOBAL SCOPE)
@@ -124,7 +177,7 @@ function onYouTubeIframeAPIReady() {
     player1 = new YT.Player('youtube-player', {
         events: { 'onReady': onPlayerReady }
     });
-    
+
     player2 = new YT.Player('modern-player', {
         events: { 'onReady': onPlayerReady }
     });
@@ -138,14 +191,14 @@ function setupVideoObserver() {
     const video1 = document.getElementById('youtube-player');
     const video2 = document.getElementById('modern-player');
     const shrineAudio = document.getElementById('shrine-audio');
-    
+
     createVideoObserver(video1, player1, shrineAudio);
-    createVideoObserver(video2, player2, shrineAudio); 
+    createVideoObserver(video2, player2, shrineAudio);
 }
 
 function createVideoObserver(element, ytPlayer, bgAudio) {
-    if(!element) return;
-    
+    if (!element) return;
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -156,21 +209,23 @@ function createVideoObserver(element, ytPlayer, bgAudio) {
             }
         });
     }, { threshold: 0.5 });
+
     observer.observe(element);
 }
+
 
 // --- HELPER FUNCTIONS ---
 
 function fadeAudio(audio, targetVolume) {
-    if(!audio) return;
+    if (!audio) return;
     const step = 0.05;
-    const interval = 50; 
-    
+    const interval = 50;
+
     if (audio.fadeInterval) clearInterval(audio.fadeInterval);
 
     audio.fadeInterval = setInterval(() => {
         let currentVol = audio.volume;
-        
+
         if (Math.abs(currentVol - targetVolume) < step) {
             audio.volume = targetVolume;
             clearInterval(audio.fadeInterval);
@@ -183,7 +238,7 @@ function fadeAudio(audio, targetVolume) {
 }
 
 function fadeAudioOut(audio) {
-    if(!audio) return;
+    if (!audio) return;
     let vol = audio.volume;
     const fadeOutInterval = setInterval(() => {
         if (vol > 0.1) {
@@ -191,8 +246,9 @@ function fadeAudioOut(audio) {
             audio.volume = vol;
         } else {
             clearInterval(fadeOutInterval);
-            audio.pause(); 
-            audio.currentTime = 0; 
+            audio.pause();
+            audio.currentTime = 0;
         }
     }, 100);
 }
+
