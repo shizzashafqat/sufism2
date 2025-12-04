@@ -23,7 +23,7 @@
             top: 110%; 
             left: 50%;
             transform: translateX(-50%); /* Centers it perfectly */
-            width: 250px; /* Wider than the icon for readability */
+            width: 280px; /* Slightly wider for better reading */
             
             /* Hidden State */
             opacity: 0;
@@ -42,7 +42,7 @@
             text-align: center;
             
             /* Smooth Animation */
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bouncy effect */
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             z-index: 100; /* Ensure it floats ON TOP of everything */
         }
 
@@ -62,7 +62,7 @@
             transition: all 0.3s ease;
         }
         
-        /* Triangle Arrow for the Popup (Optional Polish) */
+        /* Triangle Arrow for the Popup */
         .ritual-info::after {
             content: "";
             position: absolute;
