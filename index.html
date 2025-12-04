@@ -6,78 +6,9 @@
     <title>Echoes of the Mystic</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
-    
-    <!-- INLINE FIX FOR RITUAL HOVER -->
-    <style>
-        /* Container for the icon and popup */
-        .ritual-item {
-            position: relative; /* Anchors the popup */ 
-            cursor: pointer;
-            z-index: 10; /* Base z-index */
-        }
-
-        /* The Popup Box */
-        .ritual-info {
-            /* Position it floating below the icon */
-            position: absolute;
-            top: 110%; 
-            left: 50%;
-            transform: translateX(-50%); /* Centers it perfectly */
-            width: 280px; /* Slightly wider for better reading */
-            
-            /* Hidden State */
-            opacity: 0;
-            visibility: hidden;
-            margin-top: -10px; /* Slight offset for animation */
-            
-            /* Styles */
-            background: rgba(0, 0, 0, 0.95);
-            color: #fff;
-            border: 1px solid #ffaa00;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            text-align: center;
-            
-            /* Smooth Animation */
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            z-index: 100; /* Ensure it floats ON TOP of everything */
-        }
-
-        /* The Hover Trigger */
-        .ritual-item:hover .ritual-info {
-            opacity: 1;
-            visibility: visible;
-            margin-top: 10px; /* Slides down into place */
-        }
-
-        /* Icon Animation */
-        .ritual-item:hover .icon-circle {
-            transform: scale(1.15);
-            background: #fff;
-            color: #000;
-            box-shadow: 0 0 20px #ffaa00;
-            transition: all 0.3s ease;
-        }
-        
-        /* Triangle Arrow for the Popup */
-        .ritual-info::after {
-            content: "";
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            margin-left: -8px;
-            border-width: 8px;
-            border-style: solid;
-            border-color: transparent transparent #ffaa00 transparent;
-        }
-    </style>
 </head>
 <body>
 
-    <!-- SCENE 1: THE LANDING -->
     <div id="landing-screen">
         <div class="content-wrapper">
             <div class="lamp-container">
@@ -96,7 +27,6 @@
         </div>
     </div>
 
-    <!-- SCENE 2: THE SHRINE -->
     <section id="shrine-section" class="hidden">
         
         <div class="parallax-bg" id="shrine-bg"></div>
@@ -115,37 +45,22 @@
 
             <div class="interaction-zone fade-in-element">
                 <h3>Explore the Shrine Rituals</h3>
-                <p class="instruction-text">(Hover or Tap the icons)</p>
+                <p class="instruction-text">(Click an icon to reveal its meaning)</p>
                 
                 <div class="icons-container">
-                    <!-- Icon 1 -->
-                    <div class="ritual-item">
+                    <div class="ritual-item" data-ritual="thread">
                         <div class="icon-circle">🧵</div>
-                        <div class="ritual-info">
-                            <h4>Mannat Threads</h4>
-                            <p>Visitors tie threads on lattice grills as a symbolic act of making a vow. 
-                            They ask for guidance, healing, or support in times of difficulty, trusting in the spiritual presence of the saint.</p>
-                        </div>
+                        <span class="icon-label">Mannat</span>
                     </div>
 
-                    <!-- Icon 2 -->
-                    <div class="ritual-item">
+                    <div class="ritual-item" data-ritual="langar">
                         <div class="icon-circle">🍚</div>
-                        <div class="ritual-info">
-                            <h4>Langar</h4>
-                            <p>Large cauldrons of sweet or savory rice are prepared and distributed to everyone, especially the poor. 
-                            This act of feeding others is understood as worship and as a continuation of the saint’s generosity.</p>
-                        </div>
+                        <span class="icon-label">Langar</span>
                     </div>
 
-                    <!-- Icon 3 -->
-                    <div class="ritual-item">
+                    <div class="ritual-item" data-ritual="rose">
                         <div class="icon-circle">🌹</div>
-                        <div class="ritual-info">
-                            <h4>Rose Petals</h4>
-                            <p>Rose petals are purchased and placed at the shrine as an offering of love, gratitude, and reverence. 
-                            The scent and color symbolize beauty, purity, and the blessings associated with the saint.</p>
-                        </div>
+                        <span class="icon-label">Offering</span>
                     </div>
                 </div>
             </div>
@@ -171,7 +86,6 @@
 
     </section>
 
-    <!-- SCENE 3: THE MODERN ERA -->
     <section id="modern-section" class="hidden">
         
         <div class="parallax-bg" id="modern-bg"></div>
@@ -230,10 +144,8 @@
                 </p>
             </div>
 
-            <!-- GLOBAL VIDEO GALLERY -->
             <div class="gallery-container fade-in-element">
                 
-                <!-- Video 1 -->
                 <div class="gallery-item">
                     <div class="video-frame small-frame">
                         <iframe 
@@ -250,7 +162,6 @@
                     </p>
                 </div>
 
-                <!-- Video 2 -->
                 <div class="gallery-item">
                     <div class="video-frame small-frame">
                         <iframe 
@@ -272,15 +183,12 @@
         </div>
     </section>
 
-    <!-- SCENE 3: UNDERSTANDING THE TRANSFORMATION (NEW) -->
     <section id="analysis-section" class="hidden">
         
-        <!-- Analysis Background -->
         <div class="parallax-bg" id="analysis-bg"></div>
 
         <div class="modern-content analysis-content">
             
-            <!-- 1. RESEARCH QUESTION -->
             <div class="text-card fade-in-element center-card">
                 <h2>Why Did Qawwali Change?</h2>
                 <p class="highlight-text">
@@ -292,9 +200,6 @@
                 </p>
             </div>
 
-            <!-- 2. KEY FINDINGS (Side-by-Side Images & Text) -->
-            
-            <!-- A. Adaptability -->
             <div class="split-card fade-in-element glass-dark">
                 <div class="split-text">
                     <h3>A. Sufism Has Always Been Adaptive</h3>
@@ -308,12 +213,10 @@
                     </p>
                 </div>
                 <div class="split-image">
-                    <!-- Dummy Image A -->
                     <img src="dummy-image-a.jpg" alt="Sufi Adaptability" class="content-img" onerror="this.src='https://via.placeholder.com/400x300?text=Sufi+Adaptability'">
                 </div>
             </div>
 
-            <!-- B. Media Influence -->
             <div class="split-card fade-in-element glass-dark reverse-layout">
                 <div class="split-text">
                     <h3>B. Modern Media Changed How People Encounter Sufism</h3>
@@ -327,12 +230,10 @@
                     </p>
                 </div>
                 <div class="split-image">
-                    <!-- Dummy Image B -->
                     <img src="dummy-image-b.jpg" alt="Media Influence" class="content-img" onerror="this.src='https://via.placeholder.com/400x300?text=Modern+Media'">
                 </div>
             </div>
 
-            <!-- C. Meaning Shift -->
             <div class="split-card fade-in-element glass-dark">
                 <div class="split-text">
                     <h3>C. Qawwali’s Meaning Shifted From Ritual to Culture</h3>
@@ -347,12 +248,10 @@
                     </p>
                 </div>
                 <div class="split-image">
-                    <!-- Dummy Image C -->
                     <img src="dummy-image-c.jpg" alt="Cultural Shift" class="content-img" onerror="this.src='https://via.placeholder.com/400x300?text=Ritual+to+Culture'">
                 </div>
             </div>
 
-            <!-- D. Diaspora -->
             <div class="split-card fade-in-element glass-dark reverse-layout">
                 <div class="split-text">
                     <h3>D. Diaspora Reinterpretations Create New Forms</h3>
@@ -366,12 +265,10 @@
                     </p>
                 </div>
                 <div class="split-image">
-                    <!-- Dummy Image D -->
                     <img src="dummy-image-d.jpg" alt="Diaspora" class="content-img" onerror="this.src='https://via.placeholder.com/400x300?text=Diaspora+Fusion'">
                 </div>
             </div>
 
-            <!-- 3. COMPARISON TABLE -->
             <div class="comparison-container fade-in-element">
                 <h3>Traditional vs. Modern: A Comparison</h3>
                 <div class="comparison-table">
@@ -398,7 +295,6 @@
                 </div>
             </div>
 
-            <!-- 4. FINAL SYNTHESIS -->
             <div class="text-card fade-in-element center-card">
                 <h2>Final Synthesis: What We Learned</h2>
                 <p>
@@ -413,7 +309,6 @@
                 </strong></p>
             </div>
 
-            <!-- 5. INTERACTIVE REFLECTION -->
             <div class="text-card fade-in-element reflection-box">
                 <h3>Your Reflection</h3>
                 <p>Where do you encounter Qawwali today?</p>
@@ -421,7 +316,6 @@
                 <p><em>How does it shape your sense of culture, memory, or emotion?</em></p>
             </div>
 
-            <!-- 6. FINAL MOMENT -->
             <div class="text-card fade-in-element final-moment">
                 <p>
                     "Listen closely.<br>
@@ -433,7 +327,15 @@
         </div>
     </section>
 
-    <!-- AUDIO FILES -->
+    <div id="ritual-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-icon" id="modal-icon-display"></div>
+            <h3 id="modal-title">Title Here</h3>
+            <p id="modal-text">Description goes here...</p>
+        </div>
+    </div>
+
     <audio id="ambient-audio" loop>
         <source src="wind-bells.mp3" type="audio/mpeg">
     </audio>
