@@ -1,126 +1,121 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. SELECT ALL ELEMENTS AT THE TOP
     const enterBtn = document.getElementById('enter-btn');
     const landingScreen = document.getElementById('landing-screen');
     const shrineSection = document.getElementById('shrine-section');
+    const modernSection = document.getElementById('modern-section');
     
-    // --- ENTER BUTTON LOGIC ---
-    enterBtn.addEventListener('click', () => {
-        const landingAudio = document.getElementById('ambient-audio');
-        const shrineAudio = document.getElementById('shrine-audio');
+    const modernBg = document.getElementById('modern-bg');
+    
+    const landingAudio = document.getElementById('ambient-audio');
+    const shrineAudio = document.getElementById('shrine-audio');
+    
+    const fadeElements = document.querySelectorAll('.fade-in-element');
 
-        // Start landing audio
+    // 2. ENTER BUTTON LOGIC
+    enterBtn.addEventListener('click', () => {
+        // Play landing audio if not playing
         landingAudio.volume = 0.5;
         landingAudio.play().catch(e => console.log("Audio play failed:", e));
 
         // Visual Transition
         landingScreen.classList.add('fade-out');
 
-        // WAIT 1.5 seconds
+        // Delay for transition (1.5s)
         setTimeout(() => {
             landingScreen.style.display = 'none';
             shrineSection.classList.remove('hidden');
             shrineSection.scrollIntoView({ behavior: 'smooth' });
 
-            // --- AUDIO SWITCH ---
-            let vol = 0.5;
-            const fadeOutInterval = setInterval(() => {
-                if (vol > 0.1) {
-                    vol -= 0.1;
-                    landingAudio.volume = vol;
-                } else {
-                    clearInterval(fadeOutInterval);
-                    landingAudio.pause(); 
-                    landingAudio.currentTime = 0; 
-                }
-            }, 100);
-
-            shrineAudio.volume = 0.6; 
+            // Audio Switch: Fade out Landing, Start Shrine
+            fadeAudioOut(landingAudio); // Helper function defined below
+            
+            shrineAudio.volume = 0.6;
             shrineAudio.play().catch(e => console.log("Shrine audio failed:", e));
 
         }, 1500); 
-        // --- SCENE SWITCHER (Backgrounds & Audio) ---
-    const shrineSection = document.getElementById('shrine-section');
-    const modernSection = document.getElementById('modern-section');
-    const shrineBg = document.getElementById('shrine-bg');
-    const modernBg = document.getElementById('modern-bg');
-    const shrineAudio = document.getElementById('shrine-audio');
+    });
 
+    // 3. SCROLL OBSERVER (Text Fading)
+    const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.2 });
+
+    fadeElements.forEach(el => fadeObserver.observe(el));
+
+    // 4. SCENE OBSERVER (Background & Audio Switch)
     const sceneObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 // If we scroll into the MODERN section
                 if (entry.target.id === 'modern-section') {
-                    // 1. Show Modern BG
-                    modernBg.classList.add('bg-active');
-                    // 2. Hide Shrine BG (Optional, or just cover it)
-                    // 3. Fade Out Shrine Audio
+                    // Show Modern BG
+                    if(modernBg) modernBg.classList.add('bg-active');
+                    // Fade Out Shrine Audio
                     fadeAudio(shrineAudio, 0); 
                 }
             } else {
                 // If we leave the MODERN section (scrolling UP back to shrine)
                 if (entry.target.id === 'modern-section' && entry.boundingClientRect.top > 0) {
-                    modernBg.classList.remove('bg-active');
+                    if(modernBg) modernBg.classList.remove('bg-active');
                     shrineAudio.play();
-                    fadeAudio(shrineAudio, 0.6);
+                    fadeAudio(shrineAudio, 0.6); // Restore volume
                 }
             }
         });
-    }, { threshold: 0.1 }); // Trigger as soon as 10% of the section is visible
+    }, { threshold: 0.1 }); // Trigger as soon as 10% is visible
 
-    sceneObserver.observe(modernSection);
-    });
-
-    // --- SCROLL ANIMATION OBSERVER ---
-    const observerOptions = { threshold: 0.2 };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible'); 
-            }
-        });
-    }, observerOptions);
-
-    const fadeElements = document.querySelectorAll('.fade-in-element');
-    fadeElements.forEach(el => observer.observe(el));
+    if(modernSection) sceneObserver.observe(modernSection);
 });
 
 // ==========================================
-// YOUTUBE API (MUST BE OUTSIDE DOMContentLoaded)
+// YOUTUBE API (GLOBAL SCOPE)
 // ==========================================
-
-// Updated YouTube Logic
 
 var player1; // Shrine
 var player2; // Modern
 
+// 1. Load YouTube API
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+// 2. Initialize Players
 function onYouTubeIframeAPIReady() {
-    // Player 1 (Shrine)
     player1 = new YT.Player('youtube-player', {
         events: { 'onReady': onPlayerReady }
     });
     
-    // Player 2 (Modern)
     player2 = new YT.Player('modern-player', {
         events: { 'onReady': onPlayerReady }
     });
 }
 
+// 3. Set up Observers when API is ready
+function onPlayerReady(event) {
+    setupVideoObserver();
+}
+
 function setupVideoObserver() {
-    // Observer for Shrine Video
     const video1 = document.getElementById('youtube-player');
+    const video2 = document.getElementById('modern-player');
     const shrineAudio = document.getElementById('shrine-audio');
     
-    // Create specific observer for Video 1 (Shrine)
+    // Observer for Shrine Video
     createVideoObserver(video1, player1, shrineAudio);
 
     // Observer for Modern Video
-    const video2 = document.getElementById('modern-player');
-    // We pass 'null' for audio because we don't have a specific modern ambience track to pause yet
-    // Or you can pass shrineAudio to ensure it stays off.
     createVideoObserver(video2, player2, shrineAudio); 
 }
 
 function createVideoObserver(element, ytPlayer, bgAudio) {
+    if(!element) return;
+    
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -128,15 +123,15 @@ function createVideoObserver(element, ytPlayer, bgAudio) {
                 if (bgAudio) fadeAudio(bgAudio, 0);
             } else {
                 if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
-                // Only fade audio back in if we are NOT in the modern section (this logic can get complex)
-                // For simplicity, we just pause the video.
             }
         });
     }, { threshold: 0.5 });
     observer.observe(element);
 }
 
-// Helper function to fade audio smoothly
+// --- HELPER FUNCTIONS ---
+
+// Fade to specific volume
 function fadeAudio(audio, targetVolume) {
     if(!audio) return;
     const step = 0.05;
@@ -156,4 +151,19 @@ function fadeAudio(audio, targetVolume) {
             audio.volume += step;
         }
     }, interval);
+}
+
+// Specific helper to fade out completely and pause
+function fadeAudioOut(audio) {
+    let vol = audio.volume;
+    const fadeOutInterval = setInterval(() => {
+        if (vol > 0.1) {
+            vol -= 0.1;
+            audio.volume = vol;
+        } else {
+            clearInterval(fadeOutInterval);
+            audio.pause(); 
+            audio.currentTime = 0; 
+        }
+    }, 100);
 }
