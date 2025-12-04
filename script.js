@@ -13,28 +13,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const fadeElements = document.querySelectorAll('.fade-in-element');
 
     // 2. ENTER BUTTON LOGIC
-    enterBtn.addEventListener('click', () => {
-        // Play landing audio if not playing
-        landingAudio.volume = 0.5;
-        landingAudio.play().catch(e => console.log("Audio play failed:", e));
+    // 2. ENTER BUTTON LOGIC
+    if (enterBtn) {
+        enterBtn.addEventListener('click', () => {
+            // Play landing audio
+            if(landingAudio) {
+                landingAudio.volume = 0.5;
+                landingAudio.play().catch(e => console.log("Audio play failed:", e));
+            }
 
-        // Visual Transition
-        landingScreen.classList.add('fade-out');
+            // Visual Transition
+            if(landingScreen) landingScreen.classList.add('fade-out');
 
-        // Delay for transition (1.5s)
-        setTimeout(() => {
-            landingScreen.style.display = 'none';
-            shrineSection.classList.remove('hidden');
-            shrineSection.scrollIntoView({ behavior: 'smooth' });
+            // Wait 1.5s then switch
+            setTimeout(() => {
+                // 1. Hide Landing Screen
+                if(landingScreen) landingScreen.style.display = 'none';
+                
+                // 2. Reveal Shrine Section
+                if(shrineSection) {
+                    shrineSection.classList.remove('hidden');
+                    shrineSection.scrollIntoView({ behavior: 'smooth' });
+                }
 
-            // Audio Switch: Fade out Landing, Start Shrine
-            fadeAudioOut(landingAudio); // Helper function defined below
-            
-            shrineAudio.volume = 0.6;
-            shrineAudio.play().catch(e => console.log("Shrine audio failed:", e));
+                // 3. REVEAL MODERN SECTION (This was missing!)
+                if(modernSection) {
+                    modernSection.classList.remove('hidden');
+                }
 
-        }, 1500); 
-    });
+                // 4. Audio Switch
+                if(landingAudio) fadeAudioOut(landingAudio);
+                
+                if(shrineAudio) {
+                    shrineAudio.volume = 0.6;
+                    shrineAudio.play().catch(e => console.log("Shrine audio failed:", e));
+                }
+
+            }, 1500); 
+        });
+    }
 
     // 3. SCROLL OBSERVER (Text Fading)
     const fadeObserver = new IntersectionObserver((entries) => {
