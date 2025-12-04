@@ -6,6 +6,48 @@
     <title>Echoes of the Mystic</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    
+    <!-- INLINE FIX FOR RITUAL HOVER -->
+    <style>
+        /* Ensures the hover effect works perfectly */
+        .ritual-item {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            vertical-align: top; /* Keeps alignment aligned if heights differ */
+        }
+        
+        .ritual-info {
+            /* Start hidden and collapsed */
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            
+            /* Styling */
+            background: rgba(0, 0, 0, 0.85);
+            color: #e0e0e0;
+            border-radius: 8px;
+            padding: 0 15px; /* No padding when closed */
+            margin-top: 0;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* THE TRIGGER: Expand and Fade In on Hover */
+        .ritual-item:hover .ritual-info {
+            opacity: 1;
+            max-height: 300px; /* Allow enough height for text */
+            padding: 15px; /* Add padding back */
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+        }
+
+        .ritual-item:hover .icon-circle {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px #ffaa00;
+        }
+    </style>
 </head>
 <body>
 
