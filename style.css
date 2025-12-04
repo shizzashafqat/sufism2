@@ -210,14 +210,16 @@ h3 {
 }
 
 .ritual-info {
-    opacity: 0; /* Hidden by default */
+    opacity: 0;
     transform: translateY(10px);
     transition: all 0.3s ease;
     background: #222;
     padding: 10px;
     border-radius: 5px;
     font-size: 0.9rem;
+    display: block; /* important fix */
 }
+
 
 /* Reveal info on hover */
 .ritual-item:hover .ritual-info {
