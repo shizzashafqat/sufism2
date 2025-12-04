@@ -38,6 +38,36 @@ document.addEventListener('DOMContentLoaded', () => {
             shrineAudio.play().catch(e => console.log("Shrine audio failed:", e));
 
         }, 1500); 
+        // --- SCENE SWITCHER (Backgrounds & Audio) ---
+    const shrineSection = document.getElementById('shrine-section');
+    const modernSection = document.getElementById('modern-section');
+    const shrineBg = document.getElementById('shrine-bg');
+    const modernBg = document.getElementById('modern-bg');
+    const shrineAudio = document.getElementById('shrine-audio');
+
+    const sceneObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // If we scroll into the MODERN section
+                if (entry.target.id === 'modern-section') {
+                    // 1. Show Modern BG
+                    modernBg.classList.add('bg-active');
+                    // 2. Hide Shrine BG (Optional, or just cover it)
+                    // 3. Fade Out Shrine Audio
+                    fadeAudio(shrineAudio, 0); 
+                }
+            } else {
+                // If we leave the MODERN section (scrolling UP back to shrine)
+                if (entry.target.id === 'modern-section' && entry.boundingClientRect.top > 0) {
+                    modernBg.classList.remove('bg-active');
+                    shrineAudio.play();
+                    fadeAudio(shrineAudio, 0.6);
+                }
+            }
+        });
+    }, { threshold: 0.1 }); // Trigger as soon as 10% of the section is visible
+
+    sceneObserver.observe(modernSection);
     });
 
     // --- SCROLL ANIMATION OBSERVER ---
