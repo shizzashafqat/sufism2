@@ -9,46 +9,69 @@
     
     <!-- INLINE FIX FOR RITUAL HOVER -->
     <style>
-        /* Ensures the hover effect works perfectly */
+        /* Container for the icon and popup */
         .ritual-item {
+            position: relative; /* Anchors the popup */
             cursor: pointer;
-            transition: transform 0.3s ease;
-            vertical-align: top;
-            position: relative;
+            z-index: 10; /* Base z-index */
+        }
+
+        /* The Popup Box */
+        .ritual-info {
+            /* Position it floating below the icon */
+            position: absolute;
+            top: 110%; 
+            left: 50%;
+            transform: translateX(-50%); /* Centers it perfectly */
+            width: 250px; /* Wider than the icon for readability */
+            
+            /* Hidden State */
+            opacity: 0;
+            visibility: hidden;
+            margin-top: -10px; /* Slight offset for animation */
+            
+            /* Styles */
+            background: rgba(0, 0, 0, 0.95);
+            color: #fff;
+            border: 1px solid #ffaa00;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            text-align: center;
+            
+            /* Smooth Animation */
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bouncy effect */
+            z-index: 100; /* Ensure it floats ON TOP of everything */
+        }
+
+        /* The Hover Trigger */
+        .ritual-item:hover .ritual-info {
+            opacity: 1;
+            visibility: visible;
+            margin-top: 10px; /* Slides down into place */
+        }
+
+        /* Icon Animation */
+        .ritual-item:hover .icon-circle {
+            transform: scale(1.15);
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 20px #ffaa00;
+            transition: all 0.3s ease;
         }
         
-        .ritual-info {
-            /* FORCE HIDDEN STATE */
-            opacity: 0 !important;
-            max-height: 0 !important;
-            margin-top: 0 !important;
-            padding: 0 15px !important; /* 0 vertical padding prevents height issues */
-            overflow: hidden !important;
-            
-            /* SMOOTH ANIMATION */
-            transition: all 0.4s ease-in-out;
-            
-            /* VISUAL STYLING */
-            background: rgba(0, 0, 0, 0.9);
-            color: #e0e0e0;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-
-        /* THE TRIGGER: Expand and Fade In on Hover */
-        .ritual-item:hover .ritual-info {
-            opacity: 1 !important;
-            max-height: 400px !important; /* Large enough to fit text */
-            padding: 15px !important;
-            margin-top: 15px !important;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255, 170, 0, 0.5);
-        }
-
-        .ritual-item:hover .icon-circle {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px #ffaa00;
+        /* Triangle Arrow for the Popup (Optional Polish) */
+        .ritual-info::after {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent transparent #ffaa00 transparent;
         }
     </style>
 </head>
