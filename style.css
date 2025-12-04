@@ -323,3 +323,147 @@ h3 {
     opacity: 1 !important;
     z-index: -1;
 }
+/* --- SECTION 3: ANALYSIS & TRANSFORMATION --- */
+
+#analysis-section {
+    position: relative;
+    min-height: 150vh;
+    width: 100%;
+    color: #fff;
+    padding-bottom: 100px;
+    z-index: 5;
+}
+
+#analysis-bg {
+    background-image: url('concert-bg.jpg'); /* Reusing concert bg, or use 'analysis-bg.jpg' */
+    background-size: cover;
+    background-position: center;
+    /* Darker filter for readability */
+    filter: brightness(0.25) sepia(0.2); 
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.analysis-content {
+    gap: 60px; /* Spacing between blocks */
+}
+
+/* Center Card Utility */
+.center-card {
+    text-align: center;
+    border-left: none;
+    border-bottom: 2px solid #ffaa00;
+}
+
+.highlight-text {
+    font-size: 1.3rem;
+    font-style: italic;
+    color: #ffcc00;
+    margin: 20px 0;
+}
+
+/* --- SPLIT LAYOUT (Text + Image) --- */
+.split-card {
+    display: flex;
+    flex-wrap: wrap; /* Stacks on mobile */
+    align-items: center;
+    gap: 30px;
+    padding: 30px;
+}
+
+.split-text {
+    flex: 1;
+    min-width: 300px;
+}
+
+.split-image {
+    flex: 1;
+    min-width: 300px;
+}
+
+.content-img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    border: 2px solid #444;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+/* Reverse layout for alternating blocks */
+.reverse-layout {
+    flex-direction: row-reverse;
+}
+
+/* --- COMPARISON TABLE --- */
+.comparison-container {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.comparison-table {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 30px;
+    border: 1px solid #555;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.col {
+    flex: 1;
+    min-width: 300px;
+    padding: 30px;
+    text-align: left;
+}
+
+.traditional {
+    background: rgba(60, 40, 20, 0.4); /* Sepia tint */
+    border-right: 1px solid #555;
+}
+
+.modern {
+    background: rgba(20, 20, 40, 0.4); /* Blue/Modern tint */
+}
+
+.comparison-table h4 {
+    color: #ffaa00;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.comparison-table ul {
+    list-style: none;
+    padding: 0;
+}
+
+.comparison-table li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- FINAL MOMENTS --- */
+.reflection-box {
+    text-align: center;
+    border: 1px dashed #ffaa00;
+}
+
+.sub-reflection {
+    font-style: italic;
+    color: #aaa;
+    margin-bottom: 10px;
+}
+
+.final-moment {
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    padding: 60px 20px;
+    border: none;
+    background: transparent;
+    color: #e0e0e0;
+}
