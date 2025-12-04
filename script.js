@@ -4,15 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const landingScreen = document.getElementById('landing-screen');
     const shrineSection = document.getElementById('shrine-section');
     const modernSection = document.getElementById('modern-section');
+    const analysisSection = document.getElementById('analysis-section'); // NEW
     
     const modernBg = document.getElementById('modern-bg');
+    const analysisBg = document.getElementById('analysis-bg'); // NEW
     
     const landingAudio = document.getElementById('ambient-audio');
     const shrineAudio = document.getElementById('shrine-audio');
     
     const fadeElements = document.querySelectorAll('.fade-in-element');
 
-    // 2. ENTER BUTTON LOGIC
     // 2. ENTER BUTTON LOGIC
     if (enterBtn) {
         enterBtn.addEventListener('click', () => {
@@ -36,12 +37,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     shrineSection.scrollIntoView({ behavior: 'smooth' });
                 }
 
-                // 3. REVEAL MODERN SECTION (This was missing!)
+                // 3. REVEAL MODERN SECTION
                 if(modernSection) {
                     modernSection.classList.remove('hidden');
                 }
 
-                // 4. Audio Switch
+                // 4. REVEAL ANALYSIS SECTION (NEW)
+                if(analysisSection) {
+                    analysisSection.classList.remove('hidden');
+                }
+
+                // 5. Audio Switch
                 if(landingAudio) fadeAudioOut(landingAudio);
                 
                 if(shrineAudio) {
@@ -68,25 +74,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const sceneObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // If we scroll into the MODERN section
-                if (entry.target.id === 'modern-section') {
-                    // Show Modern BG
+                const id = entry.target.id;
+
+                // MODERN SECTION LOGIC
+                if (id === 'modern-section') {
                     if(modernBg) modernBg.classList.add('bg-active');
-                    // Fade Out Shrine Audio
-                    fadeAudio(shrineAudio, 0); 
+                    if(analysisBg) analysisBg.classList.remove('bg-active'); // Hide Analysis BG if scrolling UP
+                    if(shrineAudio) fadeAudio(shrineAudio, 0); 
+                } 
+                
+                // ANALYSIS SECTION LOGIC (NEW)
+                else if (id === 'analysis-section') {
+                    if(analysisBg) analysisBg.classList.add('bg-active');
+                    // Optional: Fade audio back in for emotional ending?
+                    // if(shrineAudio) fadeAudio(shrineAudio, 0.3); 
                 }
             } else {
-                // If we leave the MODERN section (scrolling UP back to shrine)
+                // Leaving logic (Scrolling UP)
                 if (entry.target.id === 'modern-section' && entry.boundingClientRect.top > 0) {
                     if(modernBg) modernBg.classList.remove('bg-active');
-                    shrineAudio.play();
-                    fadeAudio(shrineAudio, 0.6); // Restore volume
+                    if(shrineAudio) {
+                        shrineAudio.play();
+                        fadeAudio(shrineAudio, 0.6); 
+                    }
                 }
             }
         });
-    }, { threshold: 0.1 }); // Trigger as soon as 10% is visible
+    }, { threshold: 0.1 }); 
 
     if(modernSection) sceneObserver.observe(modernSection);
+    if(analysisSection) sceneObserver.observe(analysisSection); // NEW
 });
 
 // ==========================================
@@ -113,7 +130,6 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-// 3. Set up Observers when API is ready
 function onPlayerReady(event) {
     setupVideoObserver();
 }
@@ -123,10 +139,7 @@ function setupVideoObserver() {
     const video2 = document.getElementById('modern-player');
     const shrineAudio = document.getElementById('shrine-audio');
     
-    // Observer for Shrine Video
     createVideoObserver(video1, player1, shrineAudio);
-
-    // Observer for Modern Video
     createVideoObserver(video2, player2, shrineAudio); 
 }
 
@@ -148,7 +161,6 @@ function createVideoObserver(element, ytPlayer, bgAudio) {
 
 // --- HELPER FUNCTIONS ---
 
-// Fade to specific volume
 function fadeAudio(audio, targetVolume) {
     if(!audio) return;
     const step = 0.05;
@@ -170,8 +182,8 @@ function fadeAudio(audio, targetVolume) {
     }, interval);
 }
 
-// Specific helper to fade out completely and pause
 function fadeAudioOut(audio) {
+    if(!audio) return;
     let vol = audio.volume;
     const fadeOutInterval = setInterval(() => {
         if (vol > 0.1) {
